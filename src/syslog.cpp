@@ -44,7 +44,7 @@ void Syslog::Start() {
 void Syslog::RunInput() {
     while(true) {
         for(int i = 0; i < INPUT_STREAMS; i++) {
-            input_streams[i].push("This is a test message for input stream " + to_string(i));
+            input_streams[i].push(to_string(rand() % 7) + " This is a test message for input stream " + to_string(i));
             cv_input[i].notify_one();
         }
         sleep(1);

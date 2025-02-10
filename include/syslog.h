@@ -11,7 +11,7 @@
 #include <queue>
 
 #define INPUT_STREAMS 5
-#define INPUT_MAX 5
+#define INPUT_MAX 1
 #define OUTPUT_MAX 20
 using namespace std;
 
@@ -27,6 +27,9 @@ class Syslog {
         vector<string> output_stream;
         mutex mtx_output;
         condition_variable cv_output;
+
+        //private functions
+        string ConvertLog(string message);
     public:
         Syslog();
         void InputHandler(int id);

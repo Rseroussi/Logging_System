@@ -7,7 +7,6 @@ void Syslog::OutputHandler() {
     while(true) {
         //wait for output
         unique_lock<mutex> lck(mtx_output);
-        cout << "Output Handler waiting for output" << endl;
         cv_output.wait(lck, [this] { return !output_stream.empty(); });
         //get output
         while(!output_stream.empty()) {
@@ -16,7 +15,6 @@ void Syslog::OutputHandler() {
             output_stream.pop_back();
         }
         lck.unlock();
-        cout << "Output Handler got output" << endl;
         //process output
         if(buffer_output.size() >= OUTPUT_MAX) {
             for(auto &msg : buffer_output) {
