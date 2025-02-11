@@ -8,14 +8,21 @@
 #include "outputhandler.h"
 
 using namespace std;
-
-
+using namespace mongocxx;
+using namespace bsoncxx::builder::stream;
+using bsoncxx::builder::basic::kvp;
 Syslog::Syslog() {
     //initialize input handlers
     for(int i = 0; i < INPUT_STREAMS; i++) {
         input_streams.push_back(queue<string>());
         // input_handlers.push_back(thread(&Syslog::InputHandler, this, i));
     }
+    //initialize mongodb
+    // mongouri = new uri{"mongodb://localhost:27017"};
+    // conn = new client{*mongouri};
+    // database db = (*conn)["timeseries"];
+    // collection coll = db["logs"];
+    // cout << "database initialized" << endl;
     //initialize output handler
     // thread output_handler(&Syslog::OutputHandler, this);
     // output_handler.join();

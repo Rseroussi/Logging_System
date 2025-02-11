@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 3.10)
 project(Logging_System)
 
 # Specify the C++ standard
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 # Add the executable
@@ -18,6 +18,10 @@ include_directories(src)
 find_package(Threads REQUIRED)
 target_link_libraries(Logging_System Threads::Threads)
 
+find_package(mongocxx REQUIRED)
+target_link_libraries(Logging_System mongo::mongocxx_shared)
 
+find_package(bsoncxx REQUIRED)
+target_link_libraries(Logging_System mongo::bsoncxx_shared)
 # Link libraries (if any)
 # target_link_libraries(Logging_System <library_name>)

@@ -2,8 +2,11 @@
 #include <chrono>
 #include <iomanip>
 
+using bsoncxx::builder::basic::kvp;
+
 void Syslog::InputHandler(int id) {
-    vector<string> buffer_output;
+    std::vector<bsoncxx::document::value> buffer_output;
+    
     //run loop for inputhandler
     while(true) {
 
@@ -33,12 +36,14 @@ void Syslog::InputHandler(int id) {
     }
 }
 
-string Syslog::ConvertLog(string message) {
+bsoncxx::document::value Syslog::ConvertLog(string message) {
     string log_level;
     string time_stamp;
     string log_message;
+    string id;
     //parse message
     //get log level
+    id = message.substr(message.length() - 2, message.length() - 1);
     log_level = message.substr(0, message.find(" "));
     message = message.substr(message.find(" ") + 1);
     //get time stamp
@@ -48,5 +53,12 @@ string Syslog::ConvertLog(string message) {
     time_temp << std::put_time(std::localtime(&currentTime), "%Y-%m-%d %H:%M:%S");
     time_stamp = time_temp.str();
     //get log message
-    return log_level + " " + time_stamp + " " + message;
+     //document builder for mongodb
+    
+    bsoncxx::document::value subdoc = bsoncxx::builder::basic::make_document(
+        kvp("id", id.c_str()), kvp("log_level", log_level.c_str()));
+    bsoncxx::document::value doc = bsoncxx::builder::basic::make_document(
+        kvp("id_severity", subdoc.view()), kvp("date", bsoncxx::types::b_date(std::chrono::system_clock::now())), kvp("message", message.c_str()));
+
+    return doc;
 }
